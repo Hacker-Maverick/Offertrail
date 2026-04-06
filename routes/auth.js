@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const { ensureGuest, ensureAuth } = require('../middleware/auth');
-const nodemailer = require('nodemailer');
+const mailer = require('../utils/mailer');
 const crypto = require('crypto');
 
 // Login Page
@@ -70,6 +70,10 @@ router.post('/signup', async (req, res) => {
 
             const newUser = new User({ name, email, password });
             await newUser.save();
+            
+            // Send welcome email (non-blocking)
+            mailer.sendWelcomeEmail(email, name).catch(err => console.error('Welcome email failed:', err));
+
             req.flash('success_msg', 'You are now registered and can log in');
             res.redirect('/auth/login');
         } catch (err) {
@@ -139,27 +143,11 @@ router.post('/forgot-password', async (req, res) => {
         user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        });
-
         const resetUrl = `${process.env.BASE_URL}/auth/reset-password/${token}`;
-        const mailOptions = {
-            to: email,
-            from: process.env.EMAIL_USER,
-            subject: 'Password Reset - OfferTrail',
-            html: `
-                <h3>You requested a password reset</h3>
-                <p>Click <a href="${resetUrl}">here</a> to reset your password.</p>
-                <p>This link expires in 1 hour.</p>
-            `
-        };
+        
+        // Use Brevo mailer
+        await mailer.sendPasswordResetEmail(email, user.name, resetUrl);
 
-        await transporter.sendMail(mailOptions);
         req.flash('success_msg', 'Check your email for password reset link');
         res.redirect('/auth/login');
     } catch (err) {
