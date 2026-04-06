@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="/styles/dashboard.css">
+
+<div class="dashboard-header page-fade-in">
+    <div class="dashboard-title">
+        <h1>Dashboard</h1>
+    </div>
+    <div class="dashboard-date">
+        <%= new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %>
+    </div>
+</div>
+
+<div class="stats-grid page-fade-in" style="animation-delay: 50ms;">
+    <!-- Stat 1 -->
+    <div class="card stat-card">
+        <div class="stat-header">
+            <svg class="stat-icon stat-color-indigo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <span class="stat-label">Total Applications</span>
+        </div>
+        <div class="stat-value"><%= stats.total %></div>
+    </div>
+    
+    <!-- Stat 2 -->
+    <div class="card stat-card">
+        <div class="stat-header">
+            <svg class="stat-icon stat-color-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span class="stat-label">Interviews</span>
+        </div>
+        <div class="stat-value"><%= stats.interviews %></div>
+    </div>
+    
+    <!-- Stat 3 -->
+    <div class="card stat-card">
+        <div class="stat-header">
+            <svg class="stat-icon stat-color-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M8 3v18"></path><path d="M16 3v18"></path><path d="M12 3v18"></path></svg>
+            <span class="stat-label">Offers</span>
+        </div>
+        <div class="stat-value"><%= stats.offers %></div>
+    </div>
+    
+    <!-- Stat 4 -->
+    <div class="card stat-card">
+        <div class="stat-header">
+            <svg class="stat-icon stat-color-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            <span class="stat-label">Rejected</span>
+        </div>
+        <div class="stat-value"><%= stats.rejected %></div>
+    </div>
+    
+    <!-- Stat 5 -->
+    <div class="card stat-card">
+        <div class="stat-header">
+            <svg class="stat-icon stat-color-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"></line><path d="M5 17h14"></path><path d="M5 7h14"></path></svg>
+            <span class="stat-label">On Campus</span>
+        </div>
+        <div class="stat-value"><%= stats.onCampus %></div>
+    </div>
+    
+    <!-- Stat 6 -->
+    <div class="card stat-card">
+        <div class="stat-header">
+            <svg class="stat-icon stat-color-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span class="stat-label">Off Campus</span>
+        </div>
+        <div class="stat-value"><%= stats.offCampus %></div>
+    </div>
+    
+    <!-- Stat 7: Today Reminders -->
+    <div class="card stat-card <%= todayReminders.length > 0 ? 'stat-alert--warning' : '' %>">
+        <div class="stat-header">
+            <svg class="stat-icon stat-color-amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="stat-label">Today's Reminders</span>
+        </div>
+        <div class="stat-value"><%= todayReminders.length %></div>
+    </div>
+    
+    <!-- Stat 8: Overdue -->
+    <div class="card stat-card <%= overdueReminders.length > 0 ? 'stat-alert--danger' : '' %>">
+        <div class="stat-header">
+            <svg class="stat-icon stat-color-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span class="stat-label">Overdue Reminders</span>
+        </div>
+        <div class="stat-value"><%= overdueReminders.length %></div>
+    </div>
+</div>
+
+<div class="recent-apps-section page-fade-in" style="animation-delay: 100ms;">
+    <div class="section-header">
+        <div class="section-title"><h2>Recent Applications</h2></div>
+        <a href="/applications" class="view-all-link">View All &rarr;</a>
+    </div>
+    
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Category</th>
+                    <th>Date Applied</th>
+                    <th>Next Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Need application data. I will assume we have 5 latest applications from DB.
+                     Wait, dashboard route doesn't pass 'applications' actually. It passes stats, todayReminders, overdueReminders. 
+                     I should either update app.js to pass recentApps, or display nothing. 
+                     I'll update app.js to pass recent applications. -->
+                <% if(locals.recentApps && recentApps.length > 0) { %>
+                    <% recentApps.forEach(app => { %>
+                        <tr>
+                            <td class="td-company"><%= app.companyName %></td>
+                            <td><%= app.role %></td>
+                            <td><span class="badge badge--<%= app.status.toLowerCase() %>"><%= app.status %></span></td>
+                            <td><%= app.category %></td>
+                            <td><%= new Date(app.dateOfApplication).toLocaleDateString() %></td>
+                            <td><%= app.nextAction || '-' %></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <svg class="text-muted" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                                <h3 style="margin-top: 16px; margin-bottom: 4px; font-size: 1.125rem;">No applications yet</h3>
+                                <p class="text-muted" style="margin-bottom: 16px;">Add your first application to get started</p>
+                                <a href="/applications/add" class="btn btn--primary btn--sm">+ Add Application</a>
+                            </div>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,140 @@
+<link rel="stylesheet" href="/styles/forms.css">
+
+<div class="form-wrapper page-fade-in">
+    <a href="/applications" class="form-back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Back to Applications
+    </a>
+
+    <div class="form-header">
+        <h1 class="form-title">Edit Application</h1>
+    </div>
+
+    <%- include('../partials/messages') %>
+
+    <div class="card form-card">
+        <form action="/applications/edit/<%= application._id %>" method="POST">
+            
+            <div class="form-section">
+                <div class="form-section-title">Basic Info</div>
+                <div class="form-grid-2">
+                    <div>
+                        <label class="label" for="companyName">Company Name</label>
+                        <input type="text" id="companyName" name="companyName" class="input" required value="<%= application.companyName %>">
+                    </div>
+                    <div>
+                        <label class="label" for="role">Role</label>
+                        <input type="text" id="role" name="role" class="input" required value="<%= application.role %>">
+                    </div>
+                </div>
+                <div class="form-group-full">
+                    <label class="label" for="linkToJob">Job Post Link</label>
+                    <div class="input-with-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                        <input type="url" id="linkToJob" name="linkToJob" class="input" value="<%= application.linkToJob %>">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Application Details</div>
+                <div class="form-grid-3">
+                    <div>
+                        <label class="label" for="dateOfApplication">Date Applied</label>
+                        <input type="date" id="dateOfApplication" name="dateOfApplication" class="input" required value="<%= application.dateOfApplication.toISOString().split('T')[0] %>">
+                    </div>
+                    <div>
+                        <label class="label" for="status">Status</label>
+                        <select id="status" name="status" class="select">
+                            <% ['Applied', 'OA', 'Interview', 'Shortlisted', 'Rejected', 'Offer', 'Ghosted'].forEach(st => { %>
+                                <option value="<%= st %>" <%= application.status === st ? 'selected' : '' %>><%= st %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label" for="category">Category</label>
+                        <select id="category" name="category" class="select" required>
+                            <option value="On Campus" <%= application.category === 'On Campus' ? 'selected' : '' %>>On Campus</option>
+                            <option value="Off Campus" <%= application.category === 'Off Campus' ? 'selected' : '' %>>Off Campus</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid-3">
+                    <div>
+                        <label class="label" for="location">Location</label>
+                        <input type="text" id="location" name="location" class="input" value="<%= application.location %>">
+                    </div>
+                    <div>
+                        <label class="label" for="duration">Duration</label>
+                        <input type="text" id="duration" name="duration" class="input" value="<%= application.duration %>">
+                    </div>
+                    <div>
+                        <label class="label" for="stipend">Stipend / Salary</label>
+                        <input type="text" id="stipend" name="stipend" class="input" value="<%= application.stipend %>">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Resume</div>
+                <div class="form-grid-2">
+                    <div>
+                        <label class="label" for="resumeLink">Resume Link</label>
+                        <div class="input-with-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            <input type="url" id="resumeLink" name="resumeLink" class="input" value="<%= application.resumeLink %>">
+                        </div>
+                    </div>
+                    <div>
+                        <!-- Optional: Resume Version field since user wants to track resume intelligence -->
+                        <label class="label" for="resumeVersion">Resume Version Name</label>
+                        <input type="text" id="resumeVersion" name="resumeVersion" class="input" value="<%= application.resumeVersion || '' %>">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Referral</div>
+                <div class="form-grid-2">
+                    <div style="display: flex; align-items: center; padding-top: 24px;">
+                        <label class="toggle-wrapper" for="referredToggle">
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="referredToggle" name="referred" <%= application.referred ? 'checked' : '' %> onchange="document.getElementById('referralName').disabled = !this.checked;">
+                                <span class="toggle-slider"></span>
+                            </div>
+                            <span class="toggle-label">Used Referral</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="label" for="referralName">Referral Name</label>
+                        <input type="text" id="referralName" name="referralName" class="input" value="<%= application.referralName %>" <%= application.referred ? '' : 'disabled' %>>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Follow-up & Notes</div>
+                <div class="form-grid-2">
+                    <div>
+                        <label class="label" for="reminderDate">Reminder Date</label>
+                        <input type="date" id="reminderDate" name="reminderDate" class="input" value="<%= application.reminderDate ? application.reminderDate.toISOString().split('T')[0] : '' %>">
+                    </div>
+                    <div>
+                        <label class="label" for="nextAction">Next Action</label>
+                        <input type="text" id="nextAction" name="nextAction" class="input" value="<%= application.nextAction %>">
+                    </div>
+                </div>
+                <div class="form-group-full">
+                    <label class="label" for="notes">Notes</label>
+                    <textarea id="notes" name="notes" class="textarea"><%= application.notes %></textarea>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <a href="/applications" class="btn btn--ghost">Cancel</a>
+                <button type="submit" class="btn btn--primary">Save Changes</button>
+            </div>
+            
+        </form>
+    </div>
+</div>

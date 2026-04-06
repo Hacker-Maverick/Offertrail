@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #0a0a0f">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OfferTrail - Organize Your Job Search</title>
+    
+    <!-- Google Fonts: Sora, DM Sans, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="/styles/main.css">
+    
+    <!-- Page Specific CSS -->
+    <%- typeof style !== 'undefined' ? style : (typeof extraStyles !== 'undefined' ? extraStyles : '') %>
+</head>
+<body>
+
+<% if (locals.userId) { %>
+    <!-- Authenticated Layout -->
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/sidebar') %>
+    
+    <div class="dashboard-wrapper page-fade-in" style="margin-left: 240px; padding-top: 56px; min-height: 100vh;">
+        <%- body %>
+    </div>
+<% } else { %>
+    <!-- Public Layout -->
+    <div class="page-wrapper">
+        <%- body %>
+    </div>
+<% } %>
+
+</body>
+</html>

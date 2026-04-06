@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="/styles/auth.css">
+
+<div class="auth-layout">
+    <!-- Left Branding Panel -->
+    <div class="auth-panel-branding">
+        <div class="auth-bg-pattern"></div>
+        <div class="auth-bg-glow"></div>
+        
+        <a href="/" class="auth-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            OfferTrail
+        </a>
+
+        <div class="auth-testimonial-wrapper">
+            <div class="auth-testimonial">
+                <p class="auth-quote">"OfferTrail transformed the way I apply for internships. Tracking resume versions was a game changer."</p>
+                <p class="auth-author">&mdash; Sarah K., Frontend Engineer</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Form Panel -->
+    <div class="auth-panel-form">
+        <div class="auth-form-container page-fade-in">
+            <h1 class="auth-title">Create your account</h1>
+            <p class="auth-subtitle">Start organizing your applications today. It's free.</p>
+
+            <%- include('../partials/messages') %>
+
+            <form action="/auth/signup" method="POST">
+                <div class="form-group">
+                    <label class="label" for="name">Full Name</label>
+                    <input type="text" id="name" name="name" class="input" required placeholder="Jane Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label class="label" for="email">Email Address</label>
+                    <input type="email" id="email" name="email" class="input" required placeholder="you@example.com" autocomplete="email">
+                </div>
+                
+                <div class="form-group">
+                    <label class="label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="input" required placeholder="Min. 6 characters">
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="input" required placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+                </div>
+
+                <button type="submit" class="btn btn--primary auth-btn-submit">Sign Up</button>
+            </form>
+
+            <div class="auth-links">
+                Already have an account? <a href="/auth/login">Sign in</a>
+            </div>
+        </div>
+    </div>
+</div>

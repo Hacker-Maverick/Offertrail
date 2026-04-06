@@ -1,0 +1,143 @@
+<link rel="stylesheet" href="/styles/applications.css">
+
+<div class="page-fade-in">
+    <div class="page-header">
+        <h1 class="page-title">Applications</h1>
+        <p class="text-secondary">Track, filter, and manage all your ongoing applications.</p>
+    </div>
+
+    <form method="GET" action="/applications" class="toolbar">
+        <div class="toolbar-left">
+            <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" name="company" class="input" placeholder="Search companies..." value="<%= query.company || '' %>">
+            </div>
+            
+            <select name="status" class="select filter-select" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                <option value="Applied" <%= query.status === 'Applied' ? 'selected' : '' %>>Applied</option>
+                <option value="OA" <%= query.status === 'OA' ? 'selected' : '' %>>OA</option>
+                <option value="Interview" <%= query.status === 'Interview' ? 'selected' : '' %>>Interview</option>
+                <option value="Offer" <%= query.status === 'Offer' ? 'selected' : '' %>>Offer</option>
+                <option value="Rejected" <%= query.status === 'Rejected' ? 'selected' : '' %>>Rejected</option>
+                <option value="Ghosted" <%= query.status === 'Ghosted' ? 'selected' : '' %>>Ghosted</option>
+            </select>
+
+            <select name="category" class="select filter-select" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                <option value="On Campus" <%= query.category === 'On Campus' ? 'selected' : '' %>>On Campus</option>
+                <option value="Off Campus" <%= query.category === 'Off Campus' ? 'selected' : '' %>>Off Campus</option>
+            </select>
+        </div>
+
+        <div class="toolbar-right">
+            <a href="/applications/add" class="btn btn--primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                New Application
+            </a>
+        </div>
+    </form>
+
+    <%- include('../partials/messages') %>
+
+    <div class="table-card">
+        <% if(applications.length > 0) { %>
+            <div class="table-overflow">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Category</th>
+                            <th>Resume</th>
+                            <th>Referral</th>
+                            <th>Date Applied</th>
+                            <th>Reminder</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% applications.forEach(app => { %>
+                            <tr>
+                                <td class="td-bold"><%= app.companyName %></td>
+                                <td><%= app.role %></td>
+                                <td>
+                                    <span class="badge badge--<%= app.status.toLowerCase() %>"><%= app.status %></span>
+                                </td>
+                                <td><%= app.category %></td>
+                                <td>
+                                    <% if(app.resumeLink) { %>
+                                        <a href="<%= app.resumeLink %>" target="_blank" class="text-secondary hover-underline" style="display: flex; gap: 4px; align-items: center;">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                            View
+                                        </a>
+                                    <% } else { %>
+                                        -
+                                    <% } %>
+                                </td>
+                                <td><%= app.referred && app.referralName ? app.referralName : '-' %></td>
+                                <td><%= new Date(app.dateOfApplication).toLocaleDateString() %></td>
+                                <td>
+                                    <% if(app.reminderDate) { %>
+                                        <span class="<%= app.reminderClass === 'overdue' ? 'reminder--overdue' : (app.reminderClass === 'today' ? 'reminder--today' : 'text-secondary') %>">
+                                            <%= new Date(app.reminderDate).toLocaleDateString() %>
+                                        </span>
+                                    <% } else { %>
+                                        -
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <div class="action-btns">
+                                        <a href="/applications/edit/<%= app._id %>" class="btn btn--icon btn--ghost" title="Edit">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                        </a>
+                                        <form action="/applications/delete/<%= app._id %>" method="POST" style="display:inline;" onsubmit="return confirm('Delete this application?')">
+                                            <button type="submit" class="btn btn--icon btn--ghost hover-danger" title="Delete">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Showing <%= applications.length %> of <%= total %> applications
+                </div>
+                <% if(totalPages > 1) { %>
+                    <div class="pagination-controls">
+                        <% for(let i = 1; i <= totalPages; i++) { %>
+                            <a href="/applications?page=<%= i %>&company=<%= query.company || '' %>&status=<%= query.status || '' %>&category=<%= query.category || '' %>" class="page-btn <%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <div class="empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-muted" style="margin-bottom: 24px; opacity: 0.5;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                <h3 style="font-family: var(--font-display); font-size: 1.125rem; font-weight: 600; margin-bottom: 8px;">No applications yet</h3>
+                <p class="text-muted" style="margin-bottom: 24px;">Add your first application to get started and track your progress.</p>
+                <a href="/applications/add" class="btn btn--primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Application
+                </a>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<style>
+.hover-danger:hover {
+    color: var(--danger);
+    border-color: var(--danger);
+    background-color: rgba(239, 68, 68, 0.1);
+}
+.hover-underline:hover {
+    text-decoration: underline;
+}
+</style>

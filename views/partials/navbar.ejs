@@ -1,0 +1,116 @@
+<!-- Top Navbar -->
+<nav class="top-navbar">
+  <div class="top-nav-left">
+    <!-- Mobile Hamburger icon could go here if needed -->
+  </div>
+  
+  <div class="top-nav-right">
+    <div class="user-dropdown">
+      <div class="user-avatar"><%= locals.userName ? userName.charAt(0).toUpperCase() : 'U' %></div>
+      <span class="user-name"><%= locals.userName %></span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      
+      <!-- Dropdown menu -->
+      <div class="dropdown-menu">
+        <a href="/auth/profile" class="dropdown-item">Profile Setting</a>
+        <div class="dropdown-divider"></div>
+        <a href="/auth/logout" class="dropdown-item text-danger">Logout</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+.top-navbar {
+  position: fixed;
+  top: 0;
+  left: 240px;
+  right: 0;
+  height: 56px;
+  background-color: rgba(17, 17, 24, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  z-index: 90;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.user-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  transition: background-color 150ms ease;
+  color: var(--text-secondary);
+}
+
+.user-dropdown:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.user-dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  background-color: var(--accent-muted);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.dropdown-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  width: 180px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 0;
+  box-shadow: var(--shadow-md);
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.dropdown-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--border-subtle);
+  margin: 6px 0;
+}
+
+@media (max-width: 768px) {
+  .top-navbar {
+    left: 0;
+    padding: 0 24px;
+  }
+}
+</style>
