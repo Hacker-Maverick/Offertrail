@@ -1,7 +1,9 @@
 <!-- Top Navbar -->
 <nav class="top-navbar">
   <div class="top-nav-left">
-    <!-- Mobile Hamburger icon could go here if needed -->
+    <button class="mobile-menu-btn" aria-label="Toggle Menu" onclick="document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebar-overlay').classList.add('open');">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
   </div>
   
   <div class="top-nav-right">
@@ -107,10 +109,24 @@
   margin: 6px 0;
 }
 
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 4px;
+}
+
 @media (max-width: 768px) {
   .top-navbar {
     left: 0;
     padding: 0 24px;
+  }
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
