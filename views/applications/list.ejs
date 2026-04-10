@@ -60,7 +60,9 @@
                     <tbody>
                         <% applications.forEach(app => { %>
                             <tr>
-                                <td class="td-bold"><%= app.companyName %></td>
+                                <td class="td-bold">
+                                    <a href="/applications/<%= app._id %>" class="app-link"><%= app.companyName %></a>
+                                </td>
                                 <td><%= app.role %></td>
                                 <td>
                                     <span class="badge badge--<%= app.status.toLowerCase() %>"><%= app.status %></span>
@@ -138,6 +140,16 @@
     background-color: rgba(239, 68, 68, 0.1);
 }
 .hover-underline:hover {
+    text-decoration: underline;
+}
+.app-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 150ms ease;
+    cursor: pointer;
+}
+.app-link:hover {
+    color: var(--accent);
     text-decoration: underline;
 }
 </style>

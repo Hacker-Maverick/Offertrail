@@ -85,44 +85,23 @@ router.post('/add', ensureAuth, async (req, res) => {
     }
 });
 
-// Show Edit Form
-router.get('/edit/:id', ensureAuth, async (req, res) => {
-    try {
-        const application = await Application.findOne({ _id: req.params.id, userId: req.session.userId });
-        if (!application) return res.redirect('/applications');
-        res.render('applications/edit', { application, activePage: 'applications' });
-    } catch (err) {
-        console.error(err);
-        res.redirect('/applications');
-    }
-});
-
-// Process Edit Form
-router.post('/edit/:id', ensureAuth, async (req, res) => {
-    try {
-        const { referred } = req.body;
-        const updateData = {
-            ...req.body,
-            referred: referred === 'on'
-        };
-        await Application.findOneAndUpdate({ _id: req.params.id, userId: req.session.userId }, updateData);
-        req.flash('success_msg', 'Application updated successfully');
-        res.redirect('/applications');
-    } catch (err) {
-        console.error(err);
-        req.flash('error_msg', 'Error updating application');
-        res.redirect(`/applications/edit/${req.params.id}`);
-    }
-});
-
 // Delete Application
 router.post('/delete/:id', ensureAuth, async (req, res) => {
     try {
-        await Application.findOneAndDelete({ _id: req.params.id, userId: req.session.userId });
-        req.flash('success_msg', 'Application deleted');
+        const application = await Application.findOneAndDelete({ 
+            _id: req.params.id, 
+            userId: req.session.userId 
+        });
+        
+        if (!application) {
+            req.flash('error_msg', 'Application not found or unauthorized');
+        } else {
+            req.flash('success_msg', 'Application deleted');
+        }
         res.redirect('/applications');
     } catch (err) {
-        console.error(err);
+        console.error('Delete error:', err);
+        req.flash('error_msg', 'Error deleting application');
         res.redirect('/applications');
     }
 });
@@ -152,5 +131,72 @@ router.get('/export', ensureAuth, async (req, res) => {
         res.redirect('/applications');
     }
 });
+
+
+
+// Show Edit Form
+router.get('/edit/:id', ensureAuth, async (req, res) => {
+    try {
+        const application = await Application.findOne({ _id: req.params.id, userId: req.session.userId });
+        if (!application) return res.redirect('/applications');
+        res.render('applications/edit', { application, activePage: 'applications' });
+    } catch (err) {
+        console.error(err);
+        res.redirect('/applications');
+    }
+});
+
+// Process Edit Form
+router.post('/edit/:id', ensureAuth, async (req, res) => {
+    try {
+        const { referred } = req.body;
+        const updateData = {
+            ...req.body,
+            referred: referred === 'on'
+        };
+        const application = await Application.findOneAndUpdate(
+            { _id: req.params.id, userId: req.session.userId }, 
+            updateData,
+            { new: true }
+        );
+        
+        if (!application) {
+            req.flash('error_msg', 'Application not found or unauthorized');
+            return res.redirect('/applications');
+        }
+
+        req.flash('success_msg', 'Application updated successfully');
+        res.redirect('/applications');
+    } catch (err) {
+        console.error('Edit error:', err);
+        req.flash('error_msg', 'Error updating application');
+        res.redirect(`/applications/edit/${req.params.id}`);
+    }
+});
+
+// Show Single Application Details (Moved here to avoid conflict with /edit and /export)
+router.get('/:id', ensureAuth, async (req, res) => {
+    try {
+        const application = await Application.findOne({ 
+            _id: req.params.id, 
+            userId: req.session.userId 
+        });
+
+        if (!application) {
+            req.flash('error_msg', 'Application not found');
+            return res.redirect('/applications');
+        }
+
+        res.render('applications/show', { 
+            application, 
+            activePage: 'applications' 
+        });
+    } catch (err) {
+        console.error(err);
+        res.redirect('/applications');
+    }
+});
+
+
 
 module.exports = router;

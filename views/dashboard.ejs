@@ -109,7 +109,9 @@
                 <% if(locals.recentApps && recentApps.length > 0) { %>
                     <% recentApps.forEach(app => { %>
                         <tr>
-                            <td class="td-company"><%= app.companyName %></td>
+                            <td class="td-company">
+                                <a href="/applications/<%= app._id %>" class="app-link"><%= app.companyName %></a>
+                            </td>
                             <td><%= app.role %></td>
                             <td><span class="badge badge--<%= app.status.toLowerCase() %>"><%= app.status %></span></td>
                             <td><%= app.category %></td>
@@ -133,3 +135,17 @@
         </table>
     </div>
 </div>
+
+<style>
+.app-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 150ms ease;
+    cursor: pointer;
+    font-weight: 500;
+}
+.app-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+</style>

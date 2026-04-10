@@ -1,0 +1,171 @@
+<link rel="stylesheet" href="/styles/details.css">
+
+<div class="details-container page-fade-in">
+    <div class="details-header">
+        <div class="details-title-section">
+            <nav class="breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: var(--text-muted);">
+                <a href="/applications" class="hover-underline" style="color: inherit;">Applications</a>
+                <span style="margin: 0 8px;">/</span>
+                <span style="color: var(--text-secondary);"><%= application.companyName %></span>
+            </nav>
+            <h1><%= application.companyName %></h1>
+            <div class="details-subtitle">
+                <span><%= application.role %></span>
+                <span style="width: 4px; height: 4px; border-radius: 50%; background: var(--text-muted);"></span>
+                <span class="badge badge--<%= application.status.toLowerCase() %> badge-large"><%= application.status %></span>
+            </div>
+        </div>
+        
+        <div class="details-actions">
+            <a href="/applications/edit/<%= application._id %>" class="btn btn--secondary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                Edit
+            </a>
+            <form action="/applications/delete/<%= application._id %>" method="POST" style="display: inline-block; margin: 0;">
+                <button type="submit" class="btn btn--danger" onclick="return confirm('Are you sure you want to delete this application?')">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="details-grid">
+        <div class="details-main-column">
+            <!-- Basic Info Card -->
+            <div class="details-main-card details-section">
+                <h2 class="details-section-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Application Details
+                </h2>
+                
+                <div class="details-info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Date Applied</span>
+                        <span class="info-value"><%= new Date(application.dateOfApplication).toLocaleDateString(undefined, { dateStyle: 'long' }) %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Category</span>
+                        <span class="info-value"><%= application.category %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Location</span>
+                        <span class="info-value"><%= application.location || 'Not Specified' %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Duration</span>
+                        <span class="info-value"><%= application.duration || 'Not Specified' %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Stipend / Salary</span>
+                        <span class="info-value"><%= application.stipend || 'Not Specified' %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Next Action</span>
+                        <span class="info-value"><%= application.nextAction || 'None' %></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Referral Section (if any) -->
+            <% if(application.referred) { %>
+                <div class="details-main-card details-section">
+                    <h2 class="details-section-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                        Referral Information
+                    </h2>
+                    <div class="info-item">
+                        <span class="info-label">Referrer Name</span>
+                        <span class="info-value"><%= application.referralName || 'Referred (Name Unknown)' %></span>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Notes Section -->
+            <div class="details-main-card details-section">
+                <h2 class="details-section-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Notes & Details
+                </h2>
+                <div class="notes-content">
+                    <%= application.notes || 'No notes added for this application.' %>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-sidebar">
+            <div class="sidebar-card details-section">
+                <h2 class="details-section-title">Timeline & Reminders</h2>
+                <div class="status-timeline">
+                    <div class="timeline-step">
+                        <div class="timeline-dot active"></div>
+                        <div class="info-item">
+                            <span class="info-label">Applied</span>
+                            <span class="info-value" style="font-size: 0.875rem;"><%= new Date(application.dateOfApplication).toLocaleDateString() %></span>
+                        </div>
+                    </div>
+                    <% if(application.reminderDate) { %>
+                        <div class="timeline-step">
+                            <div class="timeline-dot" style="background: var(--amber);"></div>
+                            <div class="info-item">
+                                <span class="info-label">Upcoming Reminder</span>
+                                <span class="info-value" style="font-size: 0.875rem;"><%= new Date(application.reminderDate).toLocaleDateString() %></span>
+                            </div>
+                        </div>
+                    <% } %>
+                    <div class="timeline-step">
+                        <div class="timeline-dot"></div>
+                        <div class="info-item">
+                            <span class="info-label">Current Status</span>
+                            <span class="info-value" style="font-size: 0.875rem;"><%= application.status %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links Card -->
+            <div class="sidebar-card">
+                <h2 class="details-section-title">Links & Assets</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <% if(application.linkToJob) { %>
+                        <a href="<%= application.linkToJob %>" target="_blank" class="link-box">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                            <div class="info-item">
+                                <span class="info-label" style="font-size: 0.7rem;">Job Link</span>
+                                <span class="info-value" style="font-size: 0.875rem;">View Posting</span>
+                            </div>
+                        </a>
+                    <% } %>
+                    
+                    <% if(application.resumeLink) { %>
+                        <a href="<%= application.resumeLink %>" target="_blank" class="link-box">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                            <div class="info-item">
+                                <span class="info-label" style="font-size: 0.7rem;">Resume Version: <%= application.resumeVersion || 'v1' %></span>
+                                <span class="info-value" style="font-size: 0.875rem;">View Resume</span>
+                            </div>
+                        </a>
+                    <% } %>
+
+                    <% if(!application.linkToJob && !application.resumeLink) { %>
+                        <p class="text-muted" style="font-size: 0.875rem;">No external links available.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.breadcrumb a:hover {
+    color: var(--accent) !important;
+    text-decoration: underline;
+}
+.hover-underline:hover {
+    text-decoration: underline;
+}
+.details-main-column {
+    display: flex;
+    flex-direction: column;
+}
+</style>
